@@ -148,6 +148,7 @@ function run_l1_analysis(datapath, behavpath, outdir, smoothing)
 
         con_gain = [0 1 0 0 0  0 0 0 0 0  0 0 0 0 0  0];
         con_loss = [0 0 1 0 0  0 0 0 0 0  0 0 0 0 0  0];
+        con_nloss = [0 0 -1 0 0  0 0 0 0 0  0 0 0 0 0  0];
 
         batch{3}.spm.stats.con.consess{1}.tcon.name = 'gain_PM';
         batch{3}.spm.stats.con.consess{1}.tcon.convec = [con_gain con_gain con_gain];
@@ -158,7 +159,7 @@ function run_l1_analysis(datapath, behavpath, outdir, smoothing)
         batch{3}.spm.stats.con.consess{2}.tcon.sessrep = 'none';
 
         batch{3}.spm.stats.con.consess{3}.tcon.name = 'neg_loss_PM';
-        batch{3}.spm.stats.con.consess{3}.tcon.convec = [-con_loss -con_loss -con_loss];
+        batch{3}.spm.stats.con.consess{3}.tcon.convec = [con_nloss con_nloss con_nloss];
         batch{3}.spm.stats.con.consess{3}.tcon.sessrep = 'none';
 
         batch{3}.spm.stats.con.delete = 0;
