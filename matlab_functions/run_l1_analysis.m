@@ -41,6 +41,7 @@ function run_l1_analysis(datapath, behavpath, outdir, smoothing)
 
         batch = [];
         files_movement = {};
+        files_movement_new = {};
         b = 1;
 
         for i = 1:3
@@ -50,10 +51,15 @@ function run_l1_analysis(datapath, behavpath, outdir, smoothing)
 
             % Remove the first row, 26-31 columns --> movement regressors
             R = confdata(2:end, (end - 5):end);
-
             file_movement = fullfile(funcpath, ['movement_regressors_for_epi_0' num2str(i) '.mat']);
             save(file_movement, 'R');
             files_movement = [files_movement, file_movement];
+
+            % Remove the first row, 7-18 columns --> new movement regressors
+            R = confdata(2:end, 7:18);
+            file_movement_new = fullfile(funcpath, ['movement_regressors_for_epi_0' num2str(i) '_new.mat']);
+            save(file_movement_new, 'R');
+            files_movement_new = [files_movement_new, file_movement_new];
 
             % Scan files
             tmp_niis = dir(fullfile(funcpath, ['sub-*run-0' num2str(i) '*preproc.nii']));
@@ -63,16 +69,16 @@ function run_l1_analysis(datapath, behavpath, outdir, smoothing)
                 file_scans{j, 1} = fullfile(funcpath, [tmp_niis.name ',' num2str(j)]);
             end
 
-            batch{b}.spm.spatial.smooth.data = file_scans;
-            batch{b}.spm.spatial.smooth.fwhm = smoothing;
-            batch{b}.spm.spatial.smooth.dtype = 0;
-            batch{b}.spm.spatial.smooth.im = 0;
-            batch{b}.spm.spatial.smooth.prefix = 's';
-            b = b + 1;
+            %batch{b}.spm.spatial.smooth.data = file_scans;
+            %batch{b}.spm.spatial.smooth.fwhm = smoothing;
+            %batch{b}.spm.spatial.smooth.dtype = 0;
+            %batch{b}.spm.spatial.smooth.im = 0;
+            %batch{b}.spm.spatial.smooth.prefix = 's';
+            %b = b + 1;
         end
 
-        spm_jobman('run', batch);
-        disp('Smoothing is complete.')
+        %spm_jobman('run', batch);
+        %disp('Smoothing is complete.')
 
         %% Model specification
         batch = [];
@@ -120,7 +126,7 @@ function run_l1_analysis(datapath, behavpath, outdir, smoothing)
             batch{1}.spm.stats.fmri_spec.sess(r).cond.orth = 0;
             batch{1}.spm.stats.fmri_spec.sess(r).multi = {''};
             batch{1}.spm.stats.fmri_spec.sess(r).regress = struct('name', {}, 'val', {});
-            batch{1}.spm.stats.fmri_spec.sess(r).multi_reg = {files_movement{r}};
+            batch{1}.spm.stats.fmri_spec.sess(r).multi_reg = {files_movement_new{r}};
             batch{1}.spm.stats.fmri_spec.sess(r).hpf = 128;
         end
 

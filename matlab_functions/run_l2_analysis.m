@@ -15,7 +15,7 @@ function run_l2_analysis(datapath, outdir)
     covars = {};
 
     all_conds = {'gain', 'loss'};
-    subjids = subjdirs.name;
+    subjids = {subjdirs.name};
     n_subjs = length(subjids);
 
     %% Initialise SPM defaults
@@ -46,7 +46,7 @@ function run_l2_analysis(datapath, outdir)
 
         %% specification
         batch = [];
-        scanFiles = strcat(datapath, '/', subjids, '/proc_1st/con_', contrast_num, '.nii,1') % if using subjids
+        scanFiles = strcat(datapath, '/', subjids', '/proc_1st/con_', contrast_num, '.nii,1') % if using subjids
 
         batch{1}.spm.stats.factorial_design.dir = {dir_cond};
         batch{1}.spm.stats.factorial_design.des.t1.scans = scanFiles;
@@ -60,7 +60,7 @@ function run_l2_analysis(datapath, outdir)
         batch{1}.spm.stats.factorial_design.globalm.glonorm = 1;
 
         spm_jobman('run', batch)
-        disp(['2nd Level ' method ' model is specified']);
+        disp('2nd Level model is specified');
 
         %% Estimation
         batch = [];
@@ -78,6 +78,6 @@ function run_l2_analysis(datapath, outdir)
         spm_jobman('run', batch)
 
         disp([[cond '_N' num2str(n_subjs)] ' contrast is created'])
-        disp(['All done: ' method ', ' cond])
+        disp('All done')
 
     end
