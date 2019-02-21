@@ -154,20 +154,20 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
         % parametric modulation of gain & loss
         batch{3}.spm.stats.con.spmmat = {file_spmmat};
 
-        con_accept = [0 1 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
-        con_reject = [0 0 1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
+        con_accept_reject = [0 1 -1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
+%         con_reject = [0 0 1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
 
-        batch{3}.spm.stats.con.consess{1}.tcon.name = 'accept_PM';
-        batch{3}.spm.stats.con.consess{1}.tcon.convec = [con_accept con_accept con_accept];
+        batch{3}.spm.stats.con.consess{1}.tcon.name = 'accept_reject_PM';
+        batch{3}.spm.stats.con.consess{1}.tcon.convec = [con_accept_reject con_accept_reject con_accept_reject];
         batch{3}.spm.stats.con.consess{1}.tcon.sessrep = 'none';
 
-        batch{3}.spm.stats.con.consess{2}.tcon.name = 'reject_PM';
-        batch{3}.spm.stats.con.consess{2}.tcon.convec = [con_reject con_reject con_reject];
-        batch{3}.spm.stats.con.consess{2}.tcon.sessrep = 'none';
-
-        batch{3}.spm.stats.con.consess{3}.tcon.name = 'neg_reject_PM';
-        batch{3}.spm.stats.con.consess{3}.tcon.convec = [-con_reject -con_reject -con_reject];
-        batch{3}.spm.stats.con.consess{3}.tcon.sessrep = 'none';
+%         batch{3}.spm.stats.con.consess{2}.tcon.name = 'reject_PM';
+%         batch{3}.spm.stats.con.consess{2}.tcon.convec = [con_reject con_reject con_reject];
+%         batch{3}.spm.stats.con.consess{2}.tcon.sessrep = 'none';
+% 
+%         batch{3}.spm.stats.con.consess{3}.tcon.name = 'neg_reject_PM';
+%         batch{3}.spm.stats.con.consess{3}.tcon.convec = [-con_reject -con_reject -con_reject];
+%         batch{3}.spm.stats.con.consess{3}.tcon.sessrep = 'none';
 
         batch{3}.spm.stats.con.delete = 0;
 
