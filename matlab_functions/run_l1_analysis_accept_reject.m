@@ -13,8 +13,7 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
     subjdirs = subjdirs(dir_flags);
 
     % Run 1st-level analysis in parallel.
-%     for i = 1:length(subjdirs)
-    for i = 1:1
+    for i = 1:length(subjdirs)
         subjdir = subjdirs(i);
         subjid = subjdir.name;
         subjpath = fullfile(datapath, subjdir.name);
@@ -126,7 +125,7 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(3).poly = 1;
 
             % PM4: value of gamble
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).name = 'val_gamble';
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).name = 'v_gamble';
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).param = rundata(2:end, 14);
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).poly = 1;
 
@@ -154,20 +153,16 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
         % parametric modulation of gain & loss
         batch{3}.spm.stats.con.spmmat = {file_spmmat};
 
-        con_accept_reject = [0 1 -1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
-%         con_reject = [0 0 1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
+        con_acc_rej = [0 1 -1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
+        con_v_gamble = [0 0 0 0 1  0 0 0 0 0  0 0 0 0 0  0 0];
 
         batch{3}.spm.stats.con.consess{1}.tcon.name = 'accept_reject_PM';
-        batch{3}.spm.stats.con.consess{1}.tcon.convec = [con_accept_reject con_accept_reject con_accept_reject];
+        batch{3}.spm.stats.con.consess{1}.tcon.convec = [con_acc_rej con_acc_rej con_acc_rej];
         batch{3}.spm.stats.con.consess{1}.tcon.sessrep = 'none';
 
-%         batch{3}.spm.stats.con.consess{2}.tcon.name = 'reject_PM';
-%         batch{3}.spm.stats.con.consess{2}.tcon.convec = [con_reject con_reject con_reject];
-%         batch{3}.spm.stats.con.consess{2}.tcon.sessrep = 'none';
-% 
-%         batch{3}.spm.stats.con.consess{3}.tcon.name = 'neg_reject_PM';
-%         batch{3}.spm.stats.con.consess{3}.tcon.convec = [-con_reject -con_reject -con_reject];
-%         batch{3}.spm.stats.con.consess{3}.tcon.sessrep = 'none';
+        batch{3}.spm.stats.con.consess{2}.tcon.name = 'v_gamble_PM';
+        batch{3}.spm.stats.con.consess{2}.tcon.convec = [con_v_gamble con_v_gamble con_v_gamble];
+        batch{3}.spm.stats.con.consess{2}.tcon.sessrep = 'none';
 
         batch{3}.spm.stats.con.delete = 0;
 

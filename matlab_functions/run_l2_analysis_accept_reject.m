@@ -14,7 +14,7 @@ function run_l2_analysis_accept_reject(datapath, outdir)
     % covars = {'age', 'male'};
     covars = {};
 
-    all_conds = {'gain', 'loss'};
+    all_conds = {'acc_rej', 'v_gamble'};
     subjids = {subjdirs.name};
     n_subjs = length(subjids);
 
@@ -38,15 +38,15 @@ function run_l2_analysis_accept_reject(datapath, outdir)
 
         % Contrast number
         switch cond
-            case 'gain'
+            case 'acc_rej'
                 contrast_num = '0001';
-            case 'loss'
+            case 'v_gamble'
                 contrast_num = '0002';
         end
 
         %% specification
         batch = [];
-        scanFiles = strcat(datapath, '/', subjids', '/proc_1st/con_', contrast_num, '.nii,1') % if using subjids
+        scanFiles = strcat(datapath, '/', subjids', '/proc_1st_accept_reject/con_', contrast_num, '.nii,1') % if using subjids
 
         batch{1}.spm.stats.factorial_design.dir = {dir_cond};
         batch{1}.spm.stats.factorial_design.des.t1.scans = scanFiles;
