@@ -1,7 +1,7 @@
 function run_l2_analysis_accept_reject(datapath, outdir)
 
     if nargin < 2
-        outdir = 'proc_2nd';
+        outdir = 'proc_2nd_accept_reject';
     end
 
     subjdirs = dir(fullfile(datapath, 'sub-*'));
