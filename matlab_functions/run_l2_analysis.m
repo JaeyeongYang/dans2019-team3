@@ -14,7 +14,7 @@ function run_l2_analysis(datapath, outdir)
     % covars = {'age', 'male'};
     covars = {};
 
-    all_conds = {'gain', 'loss'};
+    all_conds = {'gain', 'loss', 'neg_loss'};
     subjids = {subjdirs.name};
     n_subjs = length(subjids);
 
@@ -42,6 +42,8 @@ function run_l2_analysis(datapath, outdir)
                 contrast_num = '0001';
             case 'loss'
                 contrast_num = '0002';
+            case 'negloss'
+                contrast_num = '0003';
         end
 
         %% specification
