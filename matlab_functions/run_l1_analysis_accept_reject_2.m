@@ -1,7 +1,7 @@
 function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
 
     if nargin < 3
-        outdir = 'proc_1st_accept_reject';
+        outdir = 'proc_1st_accept_reject_2';
     end
 
     if nargin < 4
@@ -109,14 +109,14 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
             batch{1}.spm.stats.fmri_spec.sess(r).cond.tmod = 0;
 
             
-            % PM1: accept
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(1).name = 'accept';
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(1).param = 1 * (rundata(2:end, 10) == 1);
+            % PM1: parametric gain
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(1).name = 'gain';
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(1).param = rundata(2:end, 5);
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(1).poly = 1;
 
-            % PM2: reject
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(2).name = 'reject';
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(2).param = 1 * (rundata(2:end, 10) == 0);
+            % PM2: parametric loss
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(2).name = 'loss';
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(2).param = rundata(2:end, 3);
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(2).poly = 1;
 
             % PM3: indifference
@@ -124,10 +124,15 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(3).param = rundata(2:end, 4);
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(3).poly = 1;
 
-            % PM4: value of gamble
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).name = 'v_gamble';
-            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).param = rundata(2:end, 14);
+            % PM4: accept
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).name = 'accept';
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).param = 1 * (rundata(2:end, 10) == 1);
             batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(4).poly = 1;
+
+            % PM5: reject
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(5).name = 'reject';
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(5).param = 1 * (rundata(2:end, 10) == 0);
+            batch{1}.spm.stats.fmri_spec.sess(r).cond.pmod(5).poly = 1;
             
             batch{1}.spm.stats.fmri_spec.sess(r).cond.orth = 0;
             batch{1}.spm.stats.fmri_spec.sess(r).multi = {''};
@@ -152,16 +157,26 @@ function run_l1_analysis_accept_reject(datapath, behavpath, outdir, smoothing)
         % parametric modulation of gain & loss
         batch{3}.spm.stats.con.spmmat = {file_spmmat};
 
-        con_acc_rej = [0 1 -1 0 0  0 0 0 0 0  0 0 0 0 0  0 0];
-        con_v_gamble = [0 0 0 0 1  0 0 0 0 0  0 0 0 0 0  0 0];
+        con_acc_rej = [0 0 0 0 1  -1 0 0 0 0  0 0 0 0 0  0 0 0];
+        con_gain = [0 1 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0];
+        con_loss = [0 0 1 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0];
+        con_gain_loss = con_gain - con_loss;
 
         batch{3}.spm.stats.con.consess{1}.tcon.name = 'accept_reject_PM';
         batch{3}.spm.stats.con.consess{1}.tcon.convec = [con_acc_rej con_acc_rej con_acc_rej];
         batch{3}.spm.stats.con.consess{1}.tcon.sessrep = 'none';
 
-        batch{3}.spm.stats.con.consess{2}.tcon.name = 'v_gamble_PM';
-        batch{3}.spm.stats.con.consess{2}.tcon.convec = [con_v_gamble con_v_gamble con_v_gamble];
+        batch{3}.spm.stats.con.consess{2}.tcon.name = 'gain_PM';
+        batch{3}.spm.stats.con.consess{2}.tcon.convec = [con_gain con_gain con_gain];
         batch{3}.spm.stats.con.consess{2}.tcon.sessrep = 'none';
+
+        batch{3}.spm.stats.con.consess{3}.tcon.name = 'loss_PM';
+        batch{3}.spm.stats.con.consess{3}.tcon.convec = [con_gain con_gain con_gain];
+        batch{3}.spm.stats.con.consess{3}.tcon.sessrep = 'none';
+
+        batch{3}.spm.stats.con.consess{4}.tcon.name = 'gain_loss_PM';
+        batch{3}.spm.stats.con.consess{4}.tcon.convec = [con_gain_loss con_gain_loss con_gain_loss];
+        batch{3}.spm.stats.con.consess{4}.tcon.sessrep = 'none';
 
         batch{3}.spm.stats.con.delete = 0;
 
