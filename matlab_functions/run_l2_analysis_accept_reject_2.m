@@ -14,7 +14,7 @@ function run_l2_analysis_accept_reject(datapath, outdir)
     % covars = {'age', 'male'};
     covars = {};
 
-    all_conds = {'acc_rej', 'v_gamble'};
+    all_conds = {'acc_rej', 'gain', 'loss', 'gain_loss'};
     subjids = {subjdirs.name};
     n_subjs = length(subjids);
 
@@ -40,8 +40,12 @@ function run_l2_analysis_accept_reject(datapath, outdir)
         switch cond
             case 'acc_rej'
                 contrast_num = '0001';
-            case 'v_gamble'
+            case 'gain'
                 contrast_num = '0002';
+            case 'loss'
+                contrast_num = '0003';
+            case 'gain_loss'
+                contrast_num = '0004';
         end
 
         %% specification
